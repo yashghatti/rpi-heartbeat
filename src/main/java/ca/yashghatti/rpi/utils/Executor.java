@@ -1,5 +1,7 @@
 package ca.yashghatti.rpi.utils;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.IOException;
 
 public class Executor {
@@ -11,6 +13,10 @@ public class Executor {
         Process process = processBuilder.start();
         output = new String(process.getInputStream().readAllBytes());
         errorOutput = new String(process.getErrorStream().readAllBytes());
+
+        if(StringUtils.isNotBlank(errorOutput)){
+            throw new IOException(errorOutput);
+        }
 
         return output;
     }

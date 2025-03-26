@@ -1,5 +1,6 @@
 package ca.yashghatti.rpi.controllers;
 
+import ca.yashghatti.rpi.utils.Executor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,16 +17,12 @@ public class HomeController {
     public String index(Model model) throws IOException {
         model.addAttribute("appVersion","v0.1");
 
-        ProcessBuilder proc = new ProcessBuilder("vcgencmd","measure_temp");
-        Process pr = proc.start();
-        String output = new String(pr.getInputStream().readAllBytes());
-        String err = new String(pr.getErrorStream().readAllBytes());
-        System.out.println("-----------");
-        System.out.println(output);
-        System.out.println(err);
-
-
+        String output = Executor.runCmd("vcgencmd","measure_temp");
         model.addAttribute("deviceTemp",output);
+
+        // $> cat /proc/stat for cpu usage stats
+
+
         return "index";
     }
 
